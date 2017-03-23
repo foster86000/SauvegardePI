@@ -4,6 +4,9 @@
 # This version disables backup image compression as it takes too much time on Pi, to enable uncomment the relavent lines
 # Setting up directories, Just change SUBDIR and DIR varibales below to get going
 
+#Je monte le partage du nas
+mount -t cifs -o username=admin //nasfoster/Sauvegarde/Raspberry /mnt/nasfoster
+
 SUBDIR=raspberrypi_backups
 DIR=/mnt/nasfoster/$SUBDIR
 
@@ -69,6 +72,9 @@ if [ $RESULT = 0 ];
       #tar zcf $OFILEFINAL.tar.gz $OFILEFINAL
       # rm -rf $OFILEFINAL
       echo "RaspberryPI backup process completed! FILE: $OFILEFINAL"
+      #Je demonte mon partage
+      umount //nasfoster/Sauvegarde/Raspberry
+
       exit 0
 # Else remove attempted backup file
    else
@@ -76,5 +82,7 @@ if [ $RESULT = 0 ];
       echo "Please check there is sufficient space on the HDD."
       rm -f $OFILE
       echo "RaspberryPI backup process failed!"
-      exit 1
+      #Je demonte mon partage
+      umount //nasfoster/Sauvegarde/Raspberry
+exit 1
 fi
